@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EventSphere</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <!-- Custom CSS (optional) -->
+  <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col font-sans">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="/" class="text-indigo-700 text-2xl font-bold flex items-center gap-2 hover:text-indigo-900">
+        <i class="fas fa-calendar-check"></i> EventSphere
+      </a>
+      <div class="flex items-center gap-6 text-sm">
+        {% if user.is_authenticated %}
+          <span class="text-gray-600 whitespace-nowrap">👋 Hi, <strong>{{ user.username }}</strong></span>
+
+          <a href="{% url 'booking_history' %}" class="text-indigo-500 hover:underline whitespace-nowrap">
+            📖 My Bookings
+          </a>
+
+          {% if user.is_staff %}
+            <a href="{% url 'create_event' %}" class="text-indigo-600 hover:underline whitespace-nowrap">
+              ➕ Create Event
+            </a>
+          {% endif %}
+
+          <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-700 font-medium whitespace-nowrap">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+          <a href="{% url 'register' %}" class="text-green-600 hover:text-green-800 font-medium whitespace-nowrap">
+            <i class="fas fa-user-plus"></i> Register
+          </a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <!-- Prompt for login page -->
+  {% if request.path == '/login/' %}
+    <div class="bg-yellow-100 border-l-4 border-yellow-400 text-yellow-700 p-4 text-center text-sm">
+      Don’t have an account?
+      <a href="{% url 'register' %}" class="font-semibold underline hover:text-yellow-800">Register here</a>.
+    </div>
+  {% endif %}
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-center text-xs text-gray-500 py-4 border-t">
+    &copy; 2025 EventSphere. All rights reserved.
+  </footer>
+
+  <!-- Optional JS -->
+  <script src="{% static 'dashboard.js' %}"></script>
+</body>
+</html>
